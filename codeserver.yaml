@@ -34,7 +34,15 @@ services:
         traefik.enable: "true"
         traefik.http.routers.codeserver.rule: Host(`${CODESERVER_DOMAIN}`)
         traefik.http.routers.codeserver.entrypoints: websecure
-        traefik.http.services.codeserver.loadbalancer.server.port: 8443
+        traefik.http.routers.codeserver.tls.certresolver: letsencrypt
+        traefik.http.routers.codeserver.service: svc_codeserver
+        traefik.http.services.svc_codeserver.loadbalancer.server.port: 8443
+
+        traefik.http.routers.preview.rule: Host(`${PREVIEW_DOMAIN}`)
+        traefik.http.routers.preview.entrypoints: websecure
+        traefik.http.routers.preview.tls.certresolver: letsencrypt
+        traefik.http.routers.preview.service: svc_preview
+        traefik.http.services.svc_preview.loadbalancer.server.port: 3000
 
     
     
