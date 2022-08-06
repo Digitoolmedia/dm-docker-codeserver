@@ -32,17 +32,13 @@ services:
           - ${NODE_PLACEMENT}
       labels:
         traefik.enable: "true"
-        traefik.http.routers.codeserver.rule: Host(`${CODESERVER_DOMAIN}`)
+        traefik.http.routers.codeserver.rule: HostRegexp(`${CODESERVER_DOMAIN}`, `{subdomain:[a-z0-9]+}.${CODESERVER_DOMAIN}`)
         traefik.http.routers.codeserver.entrypoints: websecure
-        traefik.http.routers.codeserver.tls.certresolver: letsencrypt
+        traefik.http.routers.codeserver.tls.certresolver: wildcard
+        traefik.http.routers.codeserver.tls.domains[0].main: "${CODESERVER_DOMAIN}"
+        traefik.http.routers.codeserver.tls.domains[0].sans: "*.${CODESERVER_DOMAIN}"
         traefik.http.routers.codeserver.service: svc_codeserver
         traefik.http.services.svc_codeserver.loadbalancer.server.port: 8443
-
-        traefik.http.routers.preview.rule: Host(`${PREVIEW_DOMAIN}`)
-        traefik.http.routers.preview.entrypoints: websecure
-        traefik.http.routers.preview.tls.certresolver: letsencrypt
-        traefik.http.routers.preview.service: svc_preview
-        traefik.http.services.svc_preview.loadbalancer.server.port: 3000
 
     
     
